@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "794014949142",
+    "project_id": "unsecret-e1fc6",
+    "storage_bucket": "unsecret-e1fc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794014949142:android:f5b80dfbc87ee6cb417a37",
+        "android_client_info": {
+          "package_name": "com.example.unsecret"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794014949142-ilj6mnmhj5ob0bk04vnd7n5343be709f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjbM_yuzJhGFFlLaS41s0jWAorsULOGyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794014949142-ilj6mnmhj5ob0bk04vnd7n5343be709f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
