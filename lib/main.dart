@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:unsecret/screens/authentication/new_account.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,11 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const CreateNewAccount(),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -36,10 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   TextEditingController t = TextEditingController();
 
-Future<void> _incrementCounter() async{
-  final user = FirebaseFirestore.instance.collection('users').doc('new$_counter');
+  Future<void> _incrementCounter() async {
+    final user =
+        FirebaseFirestore.instance.collection('users').doc('new$_counter');
 
-  final data = {'name':t.text,'age':21,'pro':"Engineer"};
+    final data = {'name': t.text, 'age': 21, 'pro': "Engineer"};
     setState(() {
       _counter++;
     });
@@ -63,7 +67,9 @@ Future<void> _incrementCounter() async{
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            TextField(controller: t,)
+            TextField(
+              controller: t,
+            )
           ],
         ),
       ),
