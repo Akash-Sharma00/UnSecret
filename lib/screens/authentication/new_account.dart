@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unsecret/connect_to_fire.dart';
+import 'package:unsecret/screens/authentication/profile_image_picker.dart';
 
 class CreateNewAccount extends StatelessWidget {
   const CreateNewAccount({Key? key}) : super(key: key);
@@ -14,8 +15,6 @@ class CreateNewAccount extends StatelessWidget {
     TextEditingController cPass = TextEditingController();
     ConnectToFire connect = ConnectToFire();
     final formKey = GlobalKey<FormState>();
-    bool useID = false;
-
     return SafeArea(
         child: Scaffold(
       body: Center(
@@ -91,27 +90,26 @@ class CreateNewAccount extends StatelessWidget {
                         height: 15,
                       ),
                       TextFormField(
-                          onChanged: (userID) async {
-                            useID = await connect.getData(userID);
-                          },
                           controller: userId,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Name Can't Empty";
+                              return "Id can't be empty";
+                            } else {
+                              connect.getData(value).then((value2) => {
+                                    if (value2 == true)
+                                      {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                backgroundColor: Colors.red,
+                                                content: Text(
+                                                    "Id is already taken try another")))
+                                      }
+                                  });
+                              return null;
                             }
-                            return null;
                           },
                           decoration: InputDecoration(
                               hintText: "Create UserID",
-                              suffixIcon: useID
-                                  ? const Icon(
-                                      Icons.error_outline,
-                                      color: Colors.red,
-                                    )
-                                  : const Icon(
-                                      Icons.add_task,
-                                      color: Colors.green,
-                                    ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
                       const SizedBox(
@@ -121,7 +119,7 @@ class CreateNewAccount extends StatelessWidget {
                         controller: email,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Name Can't Empty";
+                            return "Email Can't Empty";
                           } else if (!value.endsWith("@gmail.com")) {
                             return "Invalide Email";
                           }
@@ -140,7 +138,7 @@ class CreateNewAccount extends StatelessWidget {
                         controller: contact,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Name Can't Empty";
+                            return "Contact Can't Empty";
                           } else if (value.length != 10) {
                             return "Contact Must have 10 digits";
                           }
@@ -161,9 +159,9 @@ class CreateNewAccount extends StatelessWidget {
                           obscuringCharacter: '*',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Name Can't Empty";
-                            } else if (value.length != 8) {
-                              return "Password must have length of 8";
+                              return "Password Can't Empty";
+                            } else if (value.length < 6) {
+                              return "Password must have length of 6";
                             }
                             return null;
                           },
@@ -179,9 +177,9 @@ class CreateNewAccount extends StatelessWidget {
                           controller: cPass,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Name Can't Empty";
+                              return "password Can't Empty";
                             } else if (value != password.text) {
-                              return "password Not matches, Try to match the password";
+                              return "passwords Not matches, Try to match the password";
                             }
                             return null;
                           },
@@ -201,10 +199,13 @@ class CreateNewAccount extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    connect.saveData(
-                        name.text, userId.text, email.text, contact.text);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
+                    connect.saveData(name.text, userId.text, email.text,
+                        contact.text, password.text);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const PickImage(),
+                      ),
                     );
                   }
                 },
@@ -217,41 +218,4 @@ class CreateNewAccount extends StatelessWidget {
       ),
     ));
   }
-
-  validator(String text) {
-    if (text.contains('a')) {
-      return "Field Can't be Empty";
-    } else {
-      return null;
-    }
-  }
 }
-
-// class TextFormField extends StatelessWidget {
-//   const TextFormField({
-//     Key? key,
-//     this.ic,
-//     this.pric,
-//     this.sfic,
-//     this.tx,
-//     this.prtx,
-//     this.passwordText,
-//   }) : super(key: key);
-//   final Icon? ic, pric, sfic;
-//   final String? tx, prtx;
-//   final bool? passwordText;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(.0),
-//       child: TextField(
-//           obscureText: passwordText!,
-//           decoration: InputDecoration(
-//               hintText: tx,
-//               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-//               prefixIcon: sfic,
-//               suffixText: prtx)),
-//     );
-  // }
-// }
