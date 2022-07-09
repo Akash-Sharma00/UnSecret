@@ -201,7 +201,7 @@ class CreateNewAccount extends StatelessWidget {
                   if (formKey.currentState!.validate()) {
                     connect.saveData(name.text, userId.text, email.text,
                         contact.text, password.text);
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (context) => const PickImage(),

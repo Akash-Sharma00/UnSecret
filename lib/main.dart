@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:unsecret/resources/utils.dart';
 import 'package:unsecret/screens/authentication/new_account.dart';
+import 'package:unsecret/screens/authentication/profile_image_picker.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,13 +17,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const CreateNewAccount(),
+      home: user.currentUser == null
+          ? const CreateNewAccount()
+          : const PickImage(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

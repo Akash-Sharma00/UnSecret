@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ConnectToFire {
   // String? name, userId, email, contact;
@@ -44,5 +47,11 @@ class ConnectToFire {
       return Future.value(false);
     }
     return null;
+  }
+
+  uploadImg(String des, File file) async {
+    if (file == null) return;
+    final storage = FirebaseStorage.instance.ref().child('profiles/$des');
+    return storage.putFile(file);
   }
 }
