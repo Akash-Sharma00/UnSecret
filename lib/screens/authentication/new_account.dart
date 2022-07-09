@@ -117,6 +117,7 @@ class CreateNewAccount extends StatelessWidget {
                       ),
                       TextFormField(
                         controller: email,
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Email Can't Empty";
@@ -135,6 +136,7 @@ class CreateNewAccount extends StatelessWidget {
                         height: 15,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.number,
                         controller: contact,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -201,12 +203,13 @@ class CreateNewAccount extends StatelessWidget {
                   if (formKey.currentState!.validate()) {
                     connect.saveData(name.text, userId.text, email.text,
                         contact.text, password.text);
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                         fullscreenDialog: true,
-                        builder: (context) => const PickImage(),
-                      ),
-                    );
+                        builder: (context) => PickImage(
+                            name: name.text,
+                            email: email.text,
+                            contact: contact.text,
+                            id: userId.text)));
                   }
                 },
                 child: const Text("Create Account")),

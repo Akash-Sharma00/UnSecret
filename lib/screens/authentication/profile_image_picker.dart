@@ -1,12 +1,19 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unsecret/connect_to_fire.dart';
+import 'package:unsecret/screens/main_windows/profile.dart';
 
 class PickImage extends StatefulWidget {
-  const PickImage({Key? key}) : super(key: key);
+  const PickImage(
+      {Key? key,
+      required this.name,
+      required this.email,
+      required this.contact,
+      required this.id})
+      : super(key: key);
+  final String name, email, contact, id;
 
   @override
   State<PickImage> createState() => _PickImageState();
@@ -38,6 +45,17 @@ class _PickImageState extends State<PickImage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Unsecret"),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Profile()));
+              },
+              child: const Text(
+                "Skip",
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
       ),
       body: Center(
           child: Column(
@@ -90,15 +108,15 @@ class _PickImageState extends State<PickImage> {
                         )));
                     return;
                   }
+                  fire.saveLocal(widget.name, widget.id, widget.email,
+                      widget.contact, false, image.toString());
                   showDialog(
                       context: context,
                       builder: (context) {
                         return const Center(child: CircularProgressIndicator());
                       });
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const HomeWindow()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Profile()));
                 },
                 icon: const Icon(Icons.upload),
                 label: const Text("Upload Profile Image")),
