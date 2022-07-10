@@ -17,16 +17,19 @@ class CreateNewAccount extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     return SafeArea(
         child: Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Center(
         child: Column(
           children: [
             SizedBox(
-              height: 190,
+              height: 150,
               child: Stack(children: [
                 Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.topCenter,
                     width: double.infinity,
-                    height: 150,
+                    height: 100,
                     color: Colors.green,
                     child: const Text(
                       "Welcome To Un-Secret",
@@ -36,7 +39,7 @@ class CreateNewAccount extends StatelessWidget {
                           fontSize: 24),
                     )),
                 const Positioned(
-                    top: 90,
+                    top: 40,
                     left: 165,
                     child: Text(
                       "~World With No Secrets",
@@ -47,7 +50,7 @@ class CreateNewAccount extends StatelessWidget {
                     )),
                 Positioned(
                   left: 10,
-                  top: 125,
+                  top: 65,
                   child: CircleAvatar(
                     radius: 30,
                     child: Image.asset("asset/free_icon.png"),
@@ -81,6 +84,7 @@ class CreateNewAccount extends StatelessWidget {
                           return null;
                         },
                         decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.text_format),
                             hintText: "Enter Name",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -95,20 +99,31 @@ class CreateNewAccount extends StatelessWidget {
                             if (value == null || value.isEmpty) {
                               return "Id can't be empty";
                             } else {
-                              connect.getData(value).then((value2) => {
-                                    if (value2 == true)
-                                      {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                backgroundColor: Colors.red,
-                                                content: Text(
-                                                    "Id is already taken try another")))
-                                      }
-                                  });
+                              connect.getData(value).then((value2) {
+                                if (value2 == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              "Id is already taken try another")));
+                                  return;
+                                }
+                              });
+                              //  {
+                              // if (value2 == true)
+                              //   {
+                              //     ScaffoldMessenger.of(context)
+                              //         .showSnackBar(const SnackBar(
+                              //             backgroundColor: Colors.red,
+                              //             content: Text(
+                              //                 "Id is already taken try another")))
+                              //   }
+                              // });
                               return null;
                             }
                           },
                           decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.bookmark_outlined),
                               hintText: "Create UserID",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)))),
@@ -118,6 +133,9 @@ class CreateNewAccount extends StatelessWidget {
                       TextFormField(
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
+                        onEditingComplete: ()async{
+                            // final  = connect.getData(userId.text);
+                          },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Email Can't Empty";
@@ -127,6 +145,7 @@ class CreateNewAccount extends StatelessWidget {
                           return null;
                         },
                         decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.mail),
                             hintText: "Enter Email",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -157,6 +176,7 @@ class CreateNewAccount extends StatelessWidget {
                       ),
                       TextFormField(
                           controller: password,
+                          
                           obscureText: true,
                           obscuringCharacter: '*',
                           validator: (value) {
@@ -168,7 +188,7 @@ class CreateNewAccount extends StatelessWidget {
                             return null;
                           },
                           decoration: InputDecoration(
-                              hintText: "Create Password",
+                              hintText: "  Create Password",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               suffixIcon: const Icon(Icons.security))),
@@ -186,7 +206,7 @@ class CreateNewAccount extends StatelessWidget {
                             return null;
                           },
                           decoration: InputDecoration(
-                              hintText: "Confirm Password",
+                              hintText: "  Confirm Password",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               suffixIcon: const Icon(Icons.security))),
@@ -198,21 +218,32 @@ class CreateNewAccount extends StatelessWidget {
                 ),
               ),
             )),
-            ElevatedButton(
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 50,
+              child: ElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    connect.saveData(name.text, userId.text, email.text,
-                        contact.text, password.text);
+                    // connect.saveData(name.text, userId.text, email.text,
+                    //     contact.text, password.text);
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        fullscreenDialog: true,
                         builder: (context) => PickImage(
-                            name: name.text,
-                            email: email.text,
-                            contact: contact.text,
-                            id: userId.text)));
+                              name: name.text,
+                              email: email.text,
+                              contact: contact.text,
+                              id: userId.text,
+                              password: password.text,
+                            )));
                   }
                 },
-                child: const Text("Create Account")),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: const Text("Create Account"),
+              ),
+            ),
             const SizedBox(
               height: 20,
             )

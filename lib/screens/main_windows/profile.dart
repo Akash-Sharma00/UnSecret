@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:unsecret/connect_to_fire.dart';
 
@@ -31,8 +29,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    
-    final image = FileImage(File(profile['path']));
+    // final image = FileImage(File(profile['path'] as ImageProvider) );
 
     return Scaffold(
       body: Center(
@@ -44,8 +41,9 @@ class _ProfileState extends State<Profile> {
               Text(profile['email']),
               Text(profile['contact']),
               Text(profile['mode'].toString()),
-              Text(profile[4].toString()),
-              Image(image: image),
+              // Image(image: image),
+              Image.network(
+                  'https://firebasestorage.googleapis.com/v0/b/unsecret-e1fc6.appspot.com/o/profiles%2Fprofiles?alt=media&token=01265c18-5042-44fe-9078-ae2741726cb5')
             ],
           ),
         ),

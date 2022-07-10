@@ -13,7 +13,7 @@ class ConnectToFire {
   late SharedPreferences? pref;
 
   Future<void> saveData(String name, String userID, String email,
-      String contact, String password) async {
+      String contact, String password, String img) async {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -21,19 +21,19 @@ class ConnectToFire {
         'name': name,
         'userId': userID,
         'email': email,
-        'contact': contact
+        'contact': contact,
+        'image': img
       };
       await user.doc(userID).set(data);
-      // auth.signInWithEmailAndPassword(email: email, password: password);
+      auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(
           msg: e.toString().substring(37),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
+          backgroundColor: Colors.white,
+          textColor: Colors.red,
           fontSize: 16.0);
     }
   }
@@ -50,22 +50,25 @@ class ConnectToFire {
     return null;
   }
 
-  uploadImg(String des, File file) async {
-    if (file == null) return;
-    final storage = FirebaseStorage.instance.ref().child('profiles/$des');
-    return storage.putFile(file);
+  static UploadTask? uploadImg(String des, File file) {
+    try {
+      final storage = FirebaseStorage.instance.ref().child('profiles/$des');
+      return storage.putFile(file);
+    } on FirebaseException {
+      return null;
+    }
   }
 
   Future saveLocal(String name, String userid, String email, String contact,
-      bool mode, String? imgPath) async {
+      bool mode) async {
     pref = await SharedPreferences.getInstance();
+    pref!.clear();
     Map dataSet = {
       'name': name,
       'userid': userid,
       'email': email,
       'contact': contact,
       'mode': mode,
-      'path': imgPath,
     };
     String rawData = jsonEncode(dataSet);
     await pref!.setString("profile", rawData);
@@ -75,7 +78,6 @@ class ConnectToFire {
     pref = await SharedPreferences.getInstance();
     final String? rawJson = pref!.getString('profile');
     Map<String, dynamic> map = await jsonDecode(rawJson!);
-    // List l = map.values.toList();
     return map;
   }
 }

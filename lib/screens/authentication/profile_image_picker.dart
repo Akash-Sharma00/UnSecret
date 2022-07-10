@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,9 +12,10 @@ class PickImage extends StatefulWidget {
       required this.name,
       required this.email,
       required this.contact,
-      required this.id})
+      required this.id,
+      required this.password})
       : super(key: key);
-  final String name, email, contact, id;
+  final String name, email, contact, id, password;
 
   @override
   State<PickImage> createState() => _PickImageState();
@@ -22,6 +24,8 @@ class PickImage extends StatefulWidget {
 class _PickImageState extends State<PickImage> {
   File? image;
   final fire = ConnectToFire();
+  UploadTask? task;
+
   Future pickPicture(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -93,9 +97,20 @@ class _PickImageState extends State<PickImage> {
           SizedBox(
             width: 300,
             child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  var d = showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const Center(child: CircularProgressIndicator());
+                      });
                   try {
-                    fire.uploadImg('profiles/', image!);
+                    task = ConnectToFire.uploadImg(
+                        'profiles/${widget.id}', image!);
+                    if (task == null) return;
+                    final snapShot = await task!.whenComplete(() {});
+                    final imgUrl = await snapShot.ref.getDownloadURL();
+                    fire.saveData(widget.name, widget.id, widget.email,
+                        widget.contact, widget.password, imgUrl.toString());
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
@@ -106,15 +121,12 @@ class _PickImageState extends State<PickImage> {
                             fontWeight: FontWeight.bold,
                           ),
                         )));
+                    Navigator.pop(await d);
+
                     return;
                   }
                   fire.saveLocal(widget.name, widget.id, widget.email,
-                      widget.contact, false, image.toString());
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const Center(child: CircularProgressIndicator());
-                      });
+                      widget.contact, false);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => const Profile()));
                 },
