@@ -176,7 +176,7 @@ class _LogInState extends State<LogIn> {
           )));
       return;
     }
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 }

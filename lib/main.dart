@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:unsecret/screens/authentication/log_in.dart';
-import 'package:unsecret/screens/authentication/new_account.dart';
+import 'package:unsecret/screens/main_windows/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: user.currentUser == null ? const CreateNewAccount() : const LogIn(),
+      home: user.currentUser != null ? const HomePage() : const LogIn(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

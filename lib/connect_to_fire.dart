@@ -38,16 +38,30 @@ class ConnectToFire {
     }
   }
 
-  Future<bool?> getData(String userID) async {
+  Future<bool?> getUserId(String userID) async {
     await for (var messages in user.snapshots()) {
       for (var message in messages.docs.toList()) {
-        if (message.id.contains(userID)) {
-          return Future.value(true);
+        if (message.id.toString().contains(userID)) {
+          Fluttertoast.showToast(msg: "Id is taken");
+          return false;
         }
       }
-      return Future.value(false);
+      return true;
     }
-    return null;
+    return true;
+  }
+
+  Future<bool?> getUserEmail(String mail) async {
+    await for (var messages in user.snapshots()) {
+      for (var message in messages.docs.toList()) {
+        if (message.get('email').toString().contains(mail)) {
+          Fluttertoast.showToast(msg: "This mail used by another account");
+          return false;
+        }
+      }
+      return true;
+    }
+    return true;
   }
 
   static UploadTask? uploadImg(String des, File file) {

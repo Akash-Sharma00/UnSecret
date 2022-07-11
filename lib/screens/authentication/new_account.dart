@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:unsecret/connect_to_fire.dart';
-import 'package:unsecret/screens/authentication/profile_image_picker.dart';
+
+import 'profile_image_picker.dart';
 
 class CreateNewAccount extends StatelessWidget {
   const CreateNewAccount({Key? key}) : super(key: key);
 
+  static final TextEditingController userId = TextEditingController();
+  static final TextEditingController name = TextEditingController();
+  static final TextEditingController email = TextEditingController();
+  static final TextEditingController contact = TextEditingController();
+  static final TextEditingController password = TextEditingController();
+  static final TextEditingController cPass = TextEditingController();
+  static final ConnectToFire connect = ConnectToFire();
+  static final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    TextEditingController name = TextEditingController();
-    TextEditingController userId = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController contact = TextEditingController();
-    TextEditingController password = TextEditingController();
-    TextEditingController cPass = TextEditingController();
-    ConnectToFire connect = ConnectToFire();
-    final formKey = GlobalKey<FormState>();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -98,29 +99,8 @@ class CreateNewAccount extends StatelessWidget {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Id can't be empty";
-                            } else {
-                              connect.getData(value).then((value2) {
-                                if (value2 == true) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              "Id is already taken try another")));
-                                  return;
-                                }
-                              });
-                              //  {
-                              // if (value2 == true)
-                              //   {
-                              //     ScaffoldMessenger.of(context)
-                              //         .showSnackBar(const SnackBar(
-                              //             backgroundColor: Colors.red,
-                              //             content: Text(
-                              //                 "Id is already taken try another")))
-                              //   }
-                              // });
-                              return null;
                             }
+                            return null;
                           },
                           decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.bookmark_outlined),
@@ -133,9 +113,6 @@ class CreateNewAccount extends StatelessWidget {
                       TextFormField(
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
-                        onEditingComplete: ()async{
-                            // final  = connect.getData(userId.text);
-                          },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Email Can't Empty";
@@ -176,7 +153,6 @@ class CreateNewAccount extends StatelessWidget {
                       ),
                       TextFormField(
                           controller: password,
-                          
                           obscureText: true,
                           obscuringCharacter: '*',
                           validator: (value) {
@@ -222,10 +198,10 @@ class CreateNewAccount extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.9,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    // connect.saveData(name.text, userId.text, email.text,
-                    //     contact.text, password.text);
+                onPressed: () async {
+                  if (formKey.currentState!.validate() &&
+                      await connect.getUserEmail(email.text) == true &&
+                      await connect.getUserId(userId.text) == true) {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => PickImage(
                               name: name.text,
@@ -236,6 +212,7 @@ class CreateNewAccount extends StatelessWidget {
                             )));
                   }
                 },
+                // },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -252,4 +229,6 @@ class CreateNewAccount extends StatelessWidget {
       ),
     ));
   }
+
+
 }
