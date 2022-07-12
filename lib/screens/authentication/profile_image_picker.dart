@@ -52,6 +52,10 @@ class _PickImageState extends State<PickImage> {
         actions: [
           TextButton(
               onPressed: () {
+                fire.saveData(widget.name, widget.id, widget.email,
+                    widget.contact, widget.password, null);
+                fire.saveLocal(widget.name, widget.id, widget.email,
+                    widget.contact, false, null);
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => const Profile()));
               },
@@ -104,13 +108,14 @@ class _PickImageState extends State<PickImage> {
                         return const Center(child: CircularProgressIndicator());
                       });
                   try {
-                    task = ConnectToFire.uploadImg(
-                        'profiles/${widget.id}', image!);
+                    task = ConnectToFire.uploadImg(widget.id, image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
                     fire.saveData(widget.name, widget.id, widget.email,
                         widget.contact, widget.password, imgUrl.toString());
+                    fire.saveLocal(widget.name, widget.id, widget.email,
+                        widget.contact, false, imgUrl.toString());
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
@@ -125,8 +130,7 @@ class _PickImageState extends State<PickImage> {
 
                     return;
                   }
-                  fire.saveLocal(widget.name, widget.id, widget.email,
-                      widget.contact, false);
+
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => const Profile()));
                 },

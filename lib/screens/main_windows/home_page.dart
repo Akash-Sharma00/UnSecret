@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unsecret/screens/main_windows/global_chat.dart';
+import 'package:unsecret/screens/main_windows/personal_chat.dart';
+import 'package:unsecret/screens/main_windows/profile.dart';
 
 import '../authentication/log_in.dart';
 
@@ -11,21 +14,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  final screen = [
+    const GlobalChat(),
+    const PersonalChat(),
+    const Profile(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-      actions: [
-        IconButton(
-            onPressed: () {
-              final auth = FirebaseAuth.instance;
-              auth.signOut();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LogIn()));
-            },
-            icon: const Icon(Icons.abc))
-      ],
-    )));
+      child: Scaffold(
+        
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: screen,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: (index) => setState(() {
+                  _selectedIndex = index;
+                }),
+            showUnselectedLabels: false,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.public), label: "Global Chat"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_rounded), label: "Personal Chat"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), label: "Profile"),
+            ]),
+      ),
+    );
   }
 }
