@@ -14,7 +14,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    print("Hello");
     getData();
     setState(() {});
     super.initState();
@@ -22,29 +21,117 @@ class _ProfileState extends State<Profile> {
 
   getData() async {
     profile = await data.getLocalData();
-    print(profile);
-    // print(profile[5].runtimeType);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // final image = FileImage(File(profile['path'] as ImageProvider) );
-
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(profile['name']),
-              Text(profile['userid']),
-              Text(profile['email']),
-              Text(profile['contact']),
-              Text(profile['mode'].toString()),
-              // Image(image: image),
-              Image.network(
-                  'https://firebasestorage.googleapis.com/v0/b/unsecret-e1fc6.appspot.com/o/profiles%2Fprofiles?alt=media&token=01265c18-5042-44fe-9078-ae2741726cb5')
-            ],
+    return DefaultTabController(
+      length: 2,
+      child: SafeArea(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.green,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        profile['url'] == null
+                            ? Image.asset('asset/default_profile.png',
+                                height: 120, width: 120, fit: BoxFit.cover)
+                            : ClipOval(
+                                child: Image.network(profile['url'],
+                                    height: 120, width: 120, fit: BoxFit.cover),
+                              ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          profile['name'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          profile['email'],
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('ID:- @${profile['userid']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              Text('Cotact:- ${profile['contact']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 48,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: TabBar(
+                          unselectedLabelColor: Colors.black,
+                          indicator: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10)),
+                          tabs: const [
+                            Tab(
+                              text: "Media",
+                            ),
+                            Tab(
+                              text: "Post",
+                            )
+                          ]),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.62,
+                    child: TabBarView(children: [
+                      Container(
+                        child: TextButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.refresh),
+                            label: const Text("No Post In Media")),
+                      ),
+                      Container(
+                        child: TextButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.refresh),
+                            label: const Text("No Post")),
+                      )
+                    ]),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

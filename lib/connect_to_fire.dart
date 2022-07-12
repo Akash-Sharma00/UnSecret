@@ -13,7 +13,7 @@ class ConnectToFire {
   late SharedPreferences? pref;
 
   Future<void> saveData(String name, String userID, String email,
-      String contact, String password, String img) async {
+      String contact, String password, String? img) async {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -74,7 +74,7 @@ class ConnectToFire {
   }
 
   Future saveLocal(String name, String userid, String email, String contact,
-      bool mode) async {
+      bool mode,String? url) async {
     pref = await SharedPreferences.getInstance();
     pref!.clear();
     Map dataSet = {
@@ -83,6 +83,7 @@ class ConnectToFire {
       'email': email,
       'contact': contact,
       'mode': mode,
+      'url':url,
     };
     String rawData = jsonEncode(dataSet);
     await pref!.setString("profile", rawData);
