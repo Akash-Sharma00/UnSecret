@@ -1,46 +1,35 @@
 class UserHelper {
-  final String? imagePath;
+  final String imageUrl;
+  final String? mediaPost;
   final String name;
   final String email;
-  final String? about;
-  final bool isDarkMode;
+  final String id;
+  final String period;
+  final String? message;
 
-  const UserHelper({
-    required this.imagePath,
-    required this.name,
-    required this.email,
-    required this.about,
-    required this.isDarkMode,
-  });
-
-  UserHelper copy({
-    String? imagePath,
-    String? name,
-    String? email,
-    String? about,
-    bool? isDarkMode,
-  }) =>
-      UserHelper(
-        imagePath: imagePath ?? this.imagePath,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        about: about ?? this.about,
-        isDarkMode: isDarkMode ?? this.isDarkMode,
-      );
-
-  static UserHelper fromJson(Map<String, dynamic> json) => UserHelper(
-        imagePath: json['imagePath'],
-        name: json['name'],
-        email: json['email'],
-        about: json['about'],
-        isDarkMode: json['isDarkMode'],
-      );
+  UserHelper(this.imageUrl, this.mediaPost, this.name, this.email, this.id,
+      this.period, this.message);
 
   Map<String, dynamic> toJson() => {
-        'imagePath': imagePath,
+        'imageUrl': imageUrl,
+        'mediaPost': mediaPost,
         'name': name,
         'email': email,
-        'about': about,
-        'isDarkMode': isDarkMode,
+        'id': id,
+        'period': period,
+        'message': message
       };
+
+  static UserHelper fromJson(Map<String, dynamic> json) => UserHelper(
+      json['imageURl'],
+      json['mediaPost'],
+      json['name'],
+      json['email'],
+      json['id'],
+      json['period'],
+      json['message']);
+}
+
+class MessageField {
+  static String createdAt = 'createdAt';
 }
