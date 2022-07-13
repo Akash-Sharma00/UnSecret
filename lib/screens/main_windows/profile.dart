@@ -125,7 +125,7 @@ class _ProfileState extends State<Profile> {
                           stream: FirebaseFirestore.instance
                               .collection('global-chat')
                               .orderBy(MessageField.createdAt,
-                                  descending: false)
+                                  descending: true)
                               .snapshots(),
                           builder:
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
