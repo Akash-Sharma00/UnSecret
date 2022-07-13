@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unsecret/connect_to_fire.dart';
+import '../../resources/chat_containers.dart';
+import '../../resources/userHelper.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -116,17 +119,37 @@ class _ProfileState extends State<Profile> {
                     height: MediaQuery.of(context).size.height * 0.62,
                     child: TabBarView(children: [
                       Container(
-                        child: TextButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.refresh),
-                            label: const Text("No Post In Media")),
+                        color: Colors.red,
                       ),
-                      Container(
-                        child: TextButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.refresh),
-                            label: const Text("No Post")),
-                      )
+                      StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('global-chat')
+                              .orderBy(MessageField.createdAt,
+                                  descending: false)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                  itemCount: snapshot.data?.docs.length,
+                                  itemBuilder: (context, index) {
+                                    if (snapshot.data?.docs[index]['id'] ==
+                                        profile['userid']) {
+                                      return senderContainer(
+                                          snapshot.data?.docs[index]
+                                              ['timeStamp'],
+                                          snapshot.data?.docs[index]['message'],
+                                          snapshot.data?.docs[index]['id'],
+                                          snapshot.data?.docs[index]['dpUrl'],
+                                          MediaQuery.of(context).size.width);
+                                    } else {
+                                      return Container();
+                                    }
+                                  });
+                            }
+                            return senderContainer(
+                                '', "message", "id", null, 200);
+                          }),
                     ]),
                   )
                 ],

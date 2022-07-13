@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unsecret/screens/main_windows/global_chat.dart';
 import 'package:unsecret/screens/main_windows/personal_chat.dart';
 import 'package:unsecret/screens/main_windows/profile.dart';
 
-import '../authentication/log_in.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,6 +29,7 @@ class _HomePageState extends State<HomePage> {
           children: screen,
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.green[50],
             currentIndex: _selectedIndex,
             onTap: (index) => setState(() {
                   _selectedIndex = index;

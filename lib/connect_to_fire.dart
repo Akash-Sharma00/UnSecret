@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectToFire {
   final user = FirebaseFirestore.instance.collection('users');
+  final globalChat = FirebaseFirestore.instance.collection('global-chat');
   final auth = FirebaseAuth.instance;
   late SharedPreferences? pref;
 
@@ -38,6 +39,20 @@ class ConnectToFire {
     }
   }
 
+  saveToGlobal(
+      String dpUrl, String id, String message, String? mediaPost) async {
+    final chatInGlobal = {
+      'dpUrl': dpUrl,
+      'id': id,
+      'message': message,
+      'mediapost': mediaPost,
+      'timeStamp': DateTime.now().toString().substring(0, 16),
+      'createdAt': DateTime.now(),
+    };
+    // globalChat.add(chatInGlobal,CreatedAt);
+    globalChat.doc().set(chatInGlobal);
+  }
+
   Future<bool?> getUserId(String userID) async {
     await for (var messages in user.snapshots()) {
       for (var message in messages.docs.toList()) {
@@ -64,6 +79,17 @@ class ConnectToFire {
     return true;
   }
 
+  Future<Map?> getGlobalChat() async {
+    Map<String, dynamic> map = {};
+    await for (var messages in globalChat.snapshots()) {
+      for (var message in messages.docs.toList()) {
+        // map = {message.id: message.data().values.toList()};
+        map.addAll({message.id: message.data().values.toList()});
+      }
+    }
+    return map;
+  }
+
   static UploadTask? uploadImg(String des, File file) {
     try {
       final storage = FirebaseStorage.instance.ref().child('profiles/$des');
@@ -74,7 +100,7 @@ class ConnectToFire {
   }
 
   Future saveLocal(String name, String userid, String email, String contact,
-      bool mode,String? url) async {
+      bool mode, String? url) async {
     pref = await SharedPreferences.getInstance();
     pref!.clear();
     Map dataSet = {
@@ -83,7 +109,7 @@ class ConnectToFire {
       'email': email,
       'contact': contact,
       'mode': mode,
-      'url':url,
+      'url': url,
     };
     String rawData = jsonEncode(dataSet);
     await pref!.setString("profile", rawData);
