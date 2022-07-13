@@ -78,7 +78,7 @@ class _GlobalChatState extends State<GlobalChat> {
                   reverse: true,
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
-                    if (snapshot.data?.docs[index]['id'] == profile['userid']) {
+                    if (snapshot.data?.docs[index]['id'] != profile['userid']) {
                       return senderContainer(
                           snapshot.data?.docs[index]['timeStamp'],
                           snapshot.data?.docs[index]['message'],
