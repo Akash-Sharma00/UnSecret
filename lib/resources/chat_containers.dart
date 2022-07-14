@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget senderContainer(
-    String period, String message, String id, String? dp, double w) {
+Widget senderContainer(String period, String? message, String id, String? dp,
+    double w, String? mediaPost) {
   return Container(
     margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: w * 0.18),
     alignment: Alignment.centerLeft,
@@ -17,7 +17,9 @@ Widget senderContainer(
     child: Column(
       children: [
         InkWell(
-          onTap: () {},
+          onTap: () {
+            print(id);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,14 +54,16 @@ Widget senderContainer(
         const SizedBox(
           height: 7,
         ),
-        Text(textAlign: TextAlign.left, message),
+        mediaPost == null
+            ? Text(textAlign: TextAlign.left, message!)
+            : Image.network(mediaPost),
       ],
     ),
   );
 }
 
-Widget receiverContainer(
-    String? dp, String period, String message, String id, double w) {
+Widget receiverContainer(String? dp, String period, String? message, String id,
+    double w, String? mediaPost) {
   return Container(
     margin: EdgeInsets.only(top: 5, bottom: 5, left: w * 0.2, right: 10),
     alignment: Alignment.centerRight,
@@ -107,7 +111,9 @@ Widget receiverContainer(
         const SizedBox(
           height: 7,
         ),
-        Text(textAlign: TextAlign.left, message),
+        mediaPost == null
+            ? Text(textAlign: TextAlign.left, message!)
+            : Image.network(mediaPost),
       ],
     ),
   );

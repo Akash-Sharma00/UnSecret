@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unsecret/resources/userHelper.dart';
+import 'package:unsecret/screens/main_windows/share_img.dart';
 
 import '../../connect_to_fire.dart';
 import '../../resources/chat_containers.dart';
@@ -36,6 +37,7 @@ class _GlobalChatState extends State<GlobalChat> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         title: const Text("Global Chat"),
         actions: [
           TextButton.icon(
@@ -84,18 +86,20 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['message'],
                           snapshot.data?.docs[index]['id'],
                           snapshot.data?.docs[index]['dpUrl'],
-                          MediaQuery.of(context).size.width);
+                          MediaQuery.of(context).size.width,
+                          snapshot.data?.docs[index]['mediapost']);
                     } else {
                       return receiverContainer(
                           snapshot.data?.docs[index]['dpUrl'],
                           snapshot.data?.docs[index]['timeStamp'],
                           snapshot.data?.docs[index]['message'],
                           snapshot.data?.docs[index]['id'],
-                          MediaQuery.of(context).size.width);
+                          MediaQuery.of(context).size.width,
+                          snapshot.data?.docs[index]['mediapost']);
                     }
                   });
             }
-            return senderContainer('', "message", "id", null, 200);
+            return senderContainer('', "message", "id", null, 200, null);
           }),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -109,7 +113,15 @@ class _GlobalChatState extends State<GlobalChat> {
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
                     prefixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: ((context) {
+                            return ShareImg(
+                                id: profile['userid'],
+                                header: 'Global',
+                                dpulr: profile['url']);
+                          })));
+                        },
                         icon: const Icon(Icons.camera_alt_outlined)),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),

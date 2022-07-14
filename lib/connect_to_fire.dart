@@ -40,7 +40,7 @@ class ConnectToFire {
   }
 
   saveToGlobal(
-      String dpUrl, String id, String message, String? mediaPost) async {
+      String dpUrl, String id, String? message, String? mediaPost) async {
     final chatInGlobal = {
       'dpUrl': dpUrl,
       'id': id,
@@ -92,7 +92,7 @@ class ConnectToFire {
 
   static UploadTask? uploadImg(String des, File file) {
     try {
-      final storage = FirebaseStorage.instance.ref().child('profiles/$des');
+      final storage = FirebaseStorage.instance.ref().child(des);
       return storage.putFile(file);
     } on FirebaseException {
       return null;

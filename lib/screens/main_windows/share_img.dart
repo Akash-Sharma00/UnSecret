@@ -4,24 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unsecret/connect_to_fire.dart';
-import 'package:unsecret/screens/main_windows/profile.dart';
+import 'package:unsecret/screens/main_windows/home_page.dart';
 
-class PickImage extends StatefulWidget {
-  const PickImage(
-      {Key? key,
-      required this.name,
-      required this.email,
-      required this.contact,
-      required this.id,
-      required this.password})
+class ShareImg extends StatefulWidget {
+  final String header, dpulr, id;
+  const ShareImg(
+      {Key? key, required this.id, required this.header, required this.dpulr})
       : super(key: key);
-  final String name, email, contact, id, password;
 
   @override
-  State<PickImage> createState() => _PickImageState();
+  State<ShareImg> createState() => _ShareImgState();
 }
 
-class _PickImageState extends State<PickImage> {
+class _ShareImgState extends State<ShareImg> {
   File? image;
   final fire = ConnectToFire();
   UploadTask? task;
@@ -47,36 +42,16 @@ class _PickImageState extends State<PickImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("Unsecret"),
-        actions: [
-          TextButton(
-              onPressed: () {
-                fire.saveData(widget.name, widget.id, widget.email,
-                    widget.contact, widget.password, null);
-                fire.saveLocal(widget.name, widget.id, widget.email,
-                    widget.contact, false, null);
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Profile()));
-              },
-              child: const Text(
-                "Skip",
-                style: TextStyle(color: Colors.white),
-              ))
-        ],
+        title: Text("Share in ${widget.header}"),
       ),
       body: Center(
           child: Column(
         children: [
-          const SizedBox(
-            height: 100,
-          ),
-          ClipOval(
-              child: image == null
-                  ? Image.asset('asset/default_profile.png',
-                      height: 160, width: 160, fit: BoxFit.cover)
-                  : Image.file(image!,
-                      height: 160, width: 160, fit: BoxFit.cover)),
+          
+          image == null
+              ? Image.asset('asset/default_profile.png',
+                  height: 160, width: 160, fit: BoxFit.cover)
+              : Image.file(image!,height: MediaQuery.of(context).size.width *1.2, fit: BoxFit.cover),
           const SizedBox(
             height: 50,
           ),
@@ -108,14 +83,13 @@ class _PickImageState extends State<PickImage> {
                         return const Center(child: CircularProgressIndicator());
                       });
                   try {
-                    task = ConnectToFire.uploadImg("profiles/${widget.id}", image!);
+                    task = ConnectToFire.uploadImg(
+                        "global-chat/${widget.id}", image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
-                    fire.saveData(widget.name, widget.id, widget.email,
-                        widget.contact, widget.password, imgUrl.toString());
-                    fire.saveLocal(widget.name, widget.id, widget.email,
-                        widget.contact, false, imgUrl.toString());
+
+                    fire.saveToGlobal(widget.dpulr, widget.id, null, imgUrl);
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
@@ -131,8 +105,10 @@ class _PickImageState extends State<PickImage> {
                     return;
                   }
 
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const Profile()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
                 },
                 icon: const Icon(Icons.upload),
                 label: const Text("Upload Profile Image")),

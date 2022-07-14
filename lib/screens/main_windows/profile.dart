@@ -141,14 +141,13 @@ class _ProfileState extends State<Profile> {
                                           snapshot.data?.docs[index]['message'],
                                           snapshot.data?.docs[index]['id'],
                                           snapshot.data?.docs[index]['dpUrl'],
-                                          MediaQuery.of(context).size.width);
+                                          MediaQuery.of(context).size.width,snapshot.data?.docs[index]['mediapost']);
                                     } else {
                                       return Container();
                                     }
                                   });
                             }
-                            return senderContainer(
-                                '', "message", "id", null, 200);
+                            return Container();
                           }),
                     ]),
                   )
