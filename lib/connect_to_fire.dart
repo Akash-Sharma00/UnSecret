@@ -80,7 +80,6 @@ class ConnectToFire {
     return true;
   }
 
-
   Future<Map?> getGlobalChat() async {
     Map<String, dynamic> map = {};
     await for (var messages in globalChat.snapshots()) {
@@ -123,8 +122,18 @@ class ConnectToFire {
     Map<String, dynamic> map = await jsonDecode(rawJson!);
     return map;
   }
-}
 
-setPersonalChat(String localId, String cloudId)async{
-
+  setPersonalChat(String localId, String cloudId, String? message, String? pic,
+      String? dp) async {
+    final personal = {
+      'message': message,
+      'id': localId,
+      'pic': pic,
+      'dp': dp,
+      'time': DateTime.now().toString().substring(0, 16),
+      'createdAt': DateTime.now(),
+      'read': false,
+    };
+    personalChat.doc("$localId & $cloudId").collection(localId).add(personal);
+  }
 }

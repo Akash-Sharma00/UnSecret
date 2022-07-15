@@ -3,7 +3,7 @@ import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/main_windows/gallery.dart';
 
 Widget senderContainer(String period, String? message, String id, String? dp,
-    double w, String? mediaPost, List<String> pics,BuildContext context) {
+    double w, String? mediaPost, List<String> pics, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: w * 0.18),
     alignment: Alignment.centerLeft,
@@ -19,10 +19,9 @@ Widget senderContainer(String period, String? message, String id, String? dp,
     child: Column(
       children: [
         InkWell(
-          onTap: () { Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return Gallery(pics: pics);
-                  }));},
+          onTap: () {
+            ConnectToFire().setPersonalChat(id, "vishi", "message", null, dp);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,9 +61,17 @@ Widget senderContainer(String period, String? message, String id, String? dp,
         ),
         mediaPost == null
             ? Text(textAlign: TextAlign.left, message!)
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(mediaPost)),
+            : InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return Gallery(pics: pics);
+                  }));
+                },
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(mediaPost)),
+              ),
       ],
     ),
   );
