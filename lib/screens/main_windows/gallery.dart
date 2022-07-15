@@ -15,7 +15,7 @@ class _GalleryState extends State<Gallery> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(body: PhotoViewGallery.builder(itemCount: widget.pics.length, builder: (context, index){
-        final url = widget.pics[index];
+        final url = widget.pics[0];
         return PhotoViewGalleryPageOptions(imageProvider: NetworkImage(url),
         minScale: PhotoViewComputedScale.contained,
         maxScale: PhotoViewComputedScale.contained * 4);

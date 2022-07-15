@@ -20,6 +20,7 @@ class _GlobalChatState extends State<GlobalChat> {
   TextEditingController messages = TextEditingController();
   final globalChat = FirebaseFirestore.instance.collection('global-chat');
   ConnectToFire connect = ConnectToFire();
+  List<String> allPic = [];
 
   @override
   void initState() {
@@ -30,12 +31,10 @@ class _GlobalChatState extends State<GlobalChat> {
 
   getData() async {
     profile = await data.getLocalData();
-      await  connect.getMedia();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> allPic = [];
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -43,7 +42,21 @@ class _GlobalChatState extends State<GlobalChat> {
         title: const Text("Global Chat"),
         actions: [
           TextButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                var w = MediaQuery.of(context).size.width * 0.9;
+
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    enableDrag: false,
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                    ),
+                    builder: (context) => buildSheet(w));
+              },
               icon: const Icon(
                 Icons.switch_right_rounded,
                 color: Colors.white,
@@ -83,7 +96,7 @@ class _GlobalChatState extends State<GlobalChat> {
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
                     if (snapshot.data?.docs[index]['mediapost'] != null) {
-                      allPic.add(snapshot.data?.docs[index]['mediapost']);
+                      allPic.insert(0, snapshot.data?.docs[index]['mediapost']);
                     }
                     if (snapshot.data?.docs[index]['id'] != profile['userid']) {
                       return senderContainer(
@@ -167,4 +180,38 @@ class _GlobalChatState extends State<GlobalChat> {
       ),
     );
   }
+}
+
+Widget buildSheet(double w) {
+  TextEditingController searchApi = TextEditingController();
+  return Padding(
+    padding: const EdgeInsets.all(15.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(
+          height: 40,
+        ),
+        const Text(
+          "Chooce Your Topic",
+          style: TextStyle(fontSize: 16),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        TextField(
+            controller: searchApi,
+            scrollPadding: const EdgeInsets.only(bottom: 40),
+            decoration: InputDecoration(
+              suffixIcon: const Icon(Icons.search),
+              hintText: "Enter Topic",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            )),
+        const SizedBox(
+          height: 30,
+        ),
+      ],
+    ),
+  );
 }

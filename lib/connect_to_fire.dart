@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ConnectToFire {
   final user = FirebaseFirestore.instance.collection('users');
   final globalChat = FirebaseFirestore.instance.collection('global-chat');
+  final personalChat = FirebaseFirestore.instance.collection('personal-chats');
   final auth = FirebaseAuth.instance;
   late SharedPreferences? pref;
 
@@ -79,14 +80,6 @@ class ConnectToFire {
     return true;
   }
 
-  Future<void> getMedia() async {
-    
-    await for (var messages in globalChat.snapshots()) {
-      for (var message in messages.docs.toList()) {
-        print(message.get('mediapost'));
-      }
-    }
-  }
 
   Future<Map?> getGlobalChat() async {
     Map<String, dynamic> map = {};
@@ -130,4 +123,8 @@ class ConnectToFire {
     Map<String, dynamic> map = await jsonDecode(rawJson!);
     return map;
   }
+}
+
+setPersonalChat(String localId, String cloudId)async{
+
 }

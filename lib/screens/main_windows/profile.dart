@@ -13,7 +13,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final data = ConnectToFire();
-  Map? profile;
+  Map profile = {};
 
   @override
   void initState() {
@@ -45,18 +45,18 @@ class _ProfileState extends State<Profile> {
                         const SizedBox(
                           height: 10,
                         ),
-                        profile!['url'] == null
+                        profile['url'] == null
                             ? Image.asset('asset/default_profile.png',
                                 height: 120, width: 120, fit: BoxFit.cover)
                             : ClipOval(
-                                child: Image.network(profile!['url'],
+                                child: Image.network(profile['url'],
                                     height: 120, width: 120, fit: BoxFit.cover),
                               ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          profile!['name'],
+                          profile['name'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -65,7 +65,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         Text(
-                          profile!['email'],
+                          profile['email'],
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                         const SizedBox(
@@ -76,11 +76,11 @@ class _ProfileState extends State<Profile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('ID:- @${profile!['userid']}',
+                              Text('ID:- @${profile['userid']}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   )),
-                              Text('Cotact:- ${profile!['contact']}',
+                              Text('Cotact:- ${profile['contact']}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   )),
