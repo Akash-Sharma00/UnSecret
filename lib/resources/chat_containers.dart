@@ -1,7 +1,8 @@
+
 import 'package:flutter/material.dart';
 
 Widget senderContainer(String period, String? message, String id, String? dp,
-    double w, String? mediaPost) {
+    double w, String? mediaPost,List<String>? pics) {
   return Container(
     margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: w * 0.18),
     alignment: Alignment.centerLeft,
@@ -19,6 +20,7 @@ Widget senderContainer(String period, String? message, String id, String? dp,
         InkWell(
           onTap: () {
             print(id);
+            print(pics);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,7 +67,8 @@ Widget senderContainer(String period, String? message, String id, String? dp,
 }
 
 Widget receiverContainer(String? dp, String period, String? message, String id,
-    double w, String? mediaPost) {
+    double w, String? mediaPost,List<String>pics) {
+      print(pics.length);
   return Container(
     margin: EdgeInsets.only(top: 5, bottom: 5, left: w * 0.2, right: 10),
     alignment: Alignment.centerRight,

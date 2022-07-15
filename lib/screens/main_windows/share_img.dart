@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/main_windows/home_page.dart';
@@ -27,12 +28,15 @@ class _ShareImgState extends State<ShareImg> {
       if (image == null) return;
 
       final imagePath = File(image.path);
+      var compressedImg = await FlutterImageCompress.compressAndGetFile(
+          imagePath.absolute.path, "${imagePath.path}cmporessed.jpg",
+          quality: 77);
       setState(() {
-        this.image = imagePath;
+        this.image = compressedImg;
       });
     } on PlatformException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("$e hello"),
+        content: Text("$e"),
         backgroundColor: Colors.red,
       ));
     }
@@ -56,8 +60,7 @@ class _ShareImgState extends State<ShareImg> {
               : Container(
                   constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height * 0.5),
-                  child: Image.file(image!,
-                      fit: BoxFit.cover)),
+                  child: Image.file(image!, fit: BoxFit.cover)),
           const SizedBox(
             height: 50,
           ),
@@ -90,13 +93,12 @@ class _ShareImgState extends State<ShareImg> {
                       });
                   try {
                     task = ConnectToFire.uploadImg(
-                        "global-chat/${widget.id}/$image", image!);
+                        "global-chat/${widget.id}/${DateTime.now()}", image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
                     fire.saveToGlobal(widget.dpulr, widget.id, null, imgUrl);
                   } catch (e) {
-                    print(e);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
                         content: Text(

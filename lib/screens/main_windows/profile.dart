@@ -13,7 +13,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final data = ConnectToFire();
-  late Map profile;
+  Map? profile;
 
   @override
   void initState() {
@@ -39,26 +39,25 @@ class _ProfileState extends State<Profile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    color: Colors.green,
+                    // color: Colors.blue,
                     child: Column(
                       children: [
                         const SizedBox(
                           height: 10,
                         ),
-                        profile['url'] == null
+                        profile!['url'] == null
                             ? Image.asset('asset/default_profile.png',
                                 height: 120, width: 120, fit: BoxFit.cover)
                             : ClipOval(
-                                child: Image.network(profile['url'],
+                                child: Image.network(profile!['url'],
                                     height: 120, width: 120, fit: BoxFit.cover),
                               ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          profile['name'],
+                          profile!['name'],
                           style: const TextStyle(
-                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -66,7 +65,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         Text(
-                          profile['email'],
+                          profile!['email'],
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                         const SizedBox(
@@ -77,14 +76,12 @@ class _ProfileState extends State<Profile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('ID:- @${profile['userid']}',
+                              Text('ID:- @${profile!['userid']}',
                                   style: const TextStyle(
-                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   )),
-                              Text('Cotact:- ${profile['contact']}',
+                              Text('Cotact:- ${profile!['contact']}',
                                   style: const TextStyle(
-                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   )),
                             ],
@@ -121,34 +118,35 @@ class _ProfileState extends State<Profile> {
                       Container(
                         color: Colors.red,
                       ),
-                      StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('global-chat')
-                              .orderBy(MessageField.createdAt,
-                                  descending: true)
-                              .snapshots(),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasData) {
-                              return ListView.builder(
-                                  itemCount: snapshot.data?.docs.length,
-                                  itemBuilder: (context, index) {
-                                    if (snapshot.data?.docs[index]['id'] ==
-                                        profile['userid']) {
-                                      return senderContainer(
-                                          snapshot.data?.docs[index]
-                                              ['timeStamp'],
-                                          snapshot.data?.docs[index]['message'],
-                                          snapshot.data?.docs[index]['id'],
-                                          snapshot.data?.docs[index]['dpUrl'],
-                                          MediaQuery.of(context).size.width,snapshot.data?.docs[index]['mediapost']);
-                                    } else {
-                                      return Container();
-                                    }
-                                  });
-                            }
-                            return Container();
-                          }),
+                      Container()
+                      // StreamBuilder(
+                      //     stream: FirebaseFirestore.instance
+                      //         .collection('global-chat')
+                      //         .orderBy(MessageField.createdAt,
+                      //             descending: true)
+                      //         .snapshots(),
+                      //     builder:
+                      //         (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      //       if (snapshot.hasData) {
+                      //         return ListView.builder(
+                      //             itemCount: snapshot.data?.docs.length,
+                      //             itemBuilder: (context, index) {
+                      //               if (snapshot.data?.docs[index]['id'] ==
+                      //                   profile!['userid']) {
+                      //                 return senderContainer(
+                      //                     snapshot.data?.docs[index]
+                      //                         ['timeStamp'],
+                      //                     snapshot.data?.docs[index]['message'],
+                      //                     snapshot.data?.docs[index]['id'],
+                      //                     snapshot.data?.docs[index]['dpUrl'],
+                      //                     MediaQuery.of(context).size.width,snapshot.data?.docs[index]['mediapost'],null);
+                      //               } else {
+                      //                 return Container();
+                      //               }
+                      //             });
+                      //       }
+                      //       return Container();
+                      //     }),
                     ]),
                   )
                 ],
