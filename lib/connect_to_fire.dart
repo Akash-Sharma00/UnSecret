@@ -40,7 +40,7 @@ class ConnectToFire {
   }
 
   saveToGlobal(
-      String dpUrl, String id, String? message, String? mediaPost) async {
+      String? dpUrl, String id, String? message, String? mediaPost) async {
     final chatInGlobal = {
       'dpUrl': dpUrl,
       'id': id,

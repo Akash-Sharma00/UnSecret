@@ -7,9 +7,9 @@ import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/main_windows/home_page.dart';
 
 class ShareImg extends StatefulWidget {
-  final String header, dpulr, id;
-  const ShareImg(
-      {Key? key, required this.id, required this.header, required this.dpulr})
+  final String header, id;
+  final String? dpulr;
+  const ShareImg({Key? key, required this.id, required this.header, this.dpulr})
       : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class _ShareImgState extends State<ShareImg> {
       });
     } on PlatformException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("$e"),
+        content: Text("$e hello"),
         backgroundColor: Colors.red,
       ));
     }
@@ -47,11 +47,17 @@ class _ShareImgState extends State<ShareImg> {
       body: Center(
           child: Column(
         children: [
-          
           image == null
-              ? Image.asset('asset/default_profile.png',
-                  height: 160, width: 160, fit: BoxFit.cover)
-              : Image.file(image!,height: MediaQuery.of(context).size.width *1.2, fit: BoxFit.cover),
+              ? const Icon(
+                  Icons.image,
+                  size: 160,
+                  color: Colors.green,
+                )
+              : Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.5),
+                  child: Image.file(image!,
+                      fit: BoxFit.cover)),
           const SizedBox(
             height: 50,
           ),
@@ -71,7 +77,7 @@ class _ShareImgState extends State<ShareImg> {
                       builder: (context) => buildSheet());
                 },
                 icon: const Icon(Icons.image),
-                label: const Text("Select an image")),
+                label: const Text("Share an image")),
           ),
           SizedBox(
             width: 300,
@@ -84,13 +90,13 @@ class _ShareImgState extends State<ShareImg> {
                       });
                   try {
                     task = ConnectToFire.uploadImg(
-                        "global-chat/${widget.id}", image!);
+                        "global-chat/${widget.id}/$image", image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
-
                     fire.saveToGlobal(widget.dpulr, widget.id, null, imgUrl);
                   } catch (e) {
+                    print(e);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
                         content: Text(
@@ -100,18 +106,16 @@ class _ShareImgState extends State<ShareImg> {
                             fontWeight: FontWeight.bold,
                           ),
                         )));
-                    Navigator.pop(await d);
 
                     return;
                   }
-
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const HomePage()));
                 },
-                icon: const Icon(Icons.upload),
-                label: const Text("Upload Profile Image")),
+                icon: const Icon(Icons.share),
+                label: const Text("Share")),
           ),
         ],
       )),
@@ -141,6 +145,7 @@ class _ShareImgState extends State<ShareImg> {
         TextButton.icon(
             onPressed: () {
               pickPicture(ImageSource.gallery);
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.photo),
             label: const Text("Browse From Gallery")),
@@ -150,6 +155,7 @@ class _ShareImgState extends State<ShareImg> {
         TextButton.icon(
             onPressed: () {
               pickPicture(ImageSource.camera);
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.camera_alt),
             label: const Text("Click A Picture")),

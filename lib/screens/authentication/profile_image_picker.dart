@@ -108,7 +108,8 @@ class _PickImageState extends State<PickImage> {
                         return const Center(child: CircularProgressIndicator());
                       });
                   try {
-                    task = ConnectToFire.uploadImg("profiles/${widget.id}", image!);
+                    task = ConnectToFire.uploadImg(
+                        "profiles/${widget.id}", image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
@@ -165,6 +166,7 @@ class _PickImageState extends State<PickImage> {
         TextButton.icon(
             onPressed: () {
               pickPicture(ImageSource.gallery);
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.photo),
             label: const Text("Browse From Gallery")),
@@ -174,6 +176,7 @@ class _PickImageState extends State<PickImage> {
         TextButton.icon(
             onPressed: () {
               pickPicture(ImageSource.camera);
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.camera_alt),
             label: const Text("Click A Picture")),

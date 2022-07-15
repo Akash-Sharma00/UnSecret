@@ -56,7 +56,9 @@ Widget senderContainer(String period, String? message, String id, String? dp,
         ),
         mediaPost == null
             ? Text(textAlign: TextAlign.left, message!)
-            : Image.network(mediaPost),
+            : ClipRRect(
+              borderRadius:BorderRadius.circular(10),
+              child: Image.network(mediaPost)),
       ],
     ),
   );
@@ -113,7 +115,9 @@ Widget receiverContainer(String? dp, String period, String? message, String id,
         ),
         mediaPost == null
             ? Text(textAlign: TextAlign.left, message!)
-            : Image.network(mediaPost),
+            : ClipRRect(
+              borderRadius:BorderRadius.circular(10),
+              child: Image.network(mediaPost)),
       ],
     ),
   );
