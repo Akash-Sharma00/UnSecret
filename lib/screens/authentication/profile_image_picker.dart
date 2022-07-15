@@ -118,6 +118,7 @@ class _PickImageState extends State<PickImage> {
                     fire.saveLocal(widget.name, widget.id, widget.email,
                         widget.contact, false, imgUrl.toString());
                   } catch (e) {
+                    Navigator.of(context, rootNavigator: true).pop();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
                         content: Text(

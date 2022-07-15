@@ -20,7 +20,6 @@ class _GlobalChatState extends State<GlobalChat> {
   TextEditingController messages = TextEditingController();
   final globalChat = FirebaseFirestore.instance.collection('global-chat');
   ConnectToFire connect = ConnectToFire();
-  List<String> allPic = [];
 
   @override
   void initState() {
@@ -31,10 +30,12 @@ class _GlobalChatState extends State<GlobalChat> {
 
   getData() async {
     profile = await data.getLocalData();
+      await  connect.getMedia();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<String> allPic = [];
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -82,7 +83,7 @@ class _GlobalChatState extends State<GlobalChat> {
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
                     if (snapshot.data?.docs[index]['mediapost'] != null) {
-                      allPic.insert(0, snapshot.data?.docs[index]['mediapost']);
+                      allPic.add(snapshot.data?.docs[index]['mediapost']);
                     }
                     if (snapshot.data?.docs[index]['id'] != profile['userid']) {
                       return senderContainer(
@@ -92,7 +93,8 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['dpUrl'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          allPic);
+                          allPic,
+                          context);
                     } else {
                       return receiverContainer(
                           snapshot.data?.docs[index]['dpUrl'],
@@ -101,11 +103,14 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['id'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          allPic);
+                          allPic,
+                          context);
                     }
                   });
             }
-            return senderContainer('', "message", "id", null, 200, null, null);
+            return const Center(
+              child: Text("Somethind went Wrong"),
+            );
           }),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(4.0),

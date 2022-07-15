@@ -79,6 +79,15 @@ class ConnectToFire {
     return true;
   }
 
+  Future<void> getMedia() async {
+    
+    await for (var messages in globalChat.snapshots()) {
+      for (var message in messages.docs.toList()) {
+        print(message.get('mediapost'));
+      }
+    }
+  }
+
   Future<Map?> getGlobalChat() async {
     Map<String, dynamic> map = {};
     await for (var messages in globalChat.snapshots()) {

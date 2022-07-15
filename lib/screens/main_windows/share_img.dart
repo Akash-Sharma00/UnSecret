@@ -30,7 +30,7 @@ class _ShareImgState extends State<ShareImg> {
       final imagePath = File(image.path);
       var compressedImg = await FlutterImageCompress.compressAndGetFile(
           imagePath.absolute.path, "${imagePath.path}cmporessed.jpg",
-          quality: 77);
+          quality: 30);
       setState(() {
         this.image = compressedImg;
       });
@@ -86,7 +86,7 @@ class _ShareImgState extends State<ShareImg> {
             width: 300,
             child: ElevatedButton.icon(
                 onPressed: () async {
-                  var d = showDialog(
+                  showDialog(
                       context: context,
                       builder: (context) {
                         return const Center(child: CircularProgressIndicator());
@@ -99,6 +99,7 @@ class _ShareImgState extends State<ShareImg> {
                     final imgUrl = await snapShot.ref.getDownloadURL();
                     fire.saveToGlobal(widget.dpulr, widget.id, null, imgUrl);
                   } catch (e) {
+                    Navigator.of(context, rootNavigator: true).pop();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
                         content: Text(
@@ -108,7 +109,6 @@ class _ShareImgState extends State<ShareImg> {
                             fontWeight: FontWeight.bold,
                           ),
                         )));
-
                     return;
                   }
                   Navigator.pushReplacement(
