@@ -80,7 +80,7 @@ class _ProfileState extends State<Profile> {
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   )),
-                              Text('Cotact:- ${profile['contact']}',
+                              Text('Contact:- ${profile['contact']}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   )),

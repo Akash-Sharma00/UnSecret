@@ -5,7 +5,7 @@ import 'package:unsecret/screens/main_windows/profile.dart';
 
 
 class HomePage extends StatefulWidget {
-  int index;
+  var index;
    HomePage({Key? key, required this.index}) : super(key: key);
 
   @override
@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
   final screen = [
     const GlobalChat(),
     const PersonalChat(),
