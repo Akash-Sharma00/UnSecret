@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unsecret/connect_to_fire.dart';
+import 'package:unsecret/screens/main_windows/home_page.dart';
 import 'package:unsecret/screens/main_windows/profile.dart';
 
 class PickImage extends StatefulWidget {
@@ -57,7 +58,7 @@ class _PickImageState extends State<PickImage> {
                 fire.saveLocal(widget.name, widget.id, widget.email,
                     widget.contact, false, null);
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Profile()));
+                    MaterialPageRoute(builder: (context) =>  HomePage(index: 2,)));
               },
               child: const Text(
                 "Skip",
@@ -134,7 +135,7 @@ class _PickImageState extends State<PickImage> {
                   }
 
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const Profile()));
+                      MaterialPageRoute(builder: (context) =>  HomePage(index: 2,)));
                 },
                 icon: const Icon(Icons.upload),
                 label: const Text("Upload Profile Image")),

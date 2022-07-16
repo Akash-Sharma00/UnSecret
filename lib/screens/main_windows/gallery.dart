@@ -14,7 +14,15 @@ class _GalleryState extends State<Gallery> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(body: PhotoViewGallery.builder(itemCount: widget.pics.length, builder: (context, index){
+      
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar:AppBar(
+          
+          backgroundColor: Colors.transparent,shadowColor: Colors.transparent,),
+        body: PhotoViewGallery.builder(
+        enableRotation: true,
+        itemCount: widget.pics.length, builder: (context, index){
         final url = widget.pics[0];
         return PhotoViewGalleryPageOptions(imageProvider: NetworkImage(url),
         minScale: PhotoViewComputedScale.contained,

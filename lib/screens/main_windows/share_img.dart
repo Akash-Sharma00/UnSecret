@@ -114,7 +114,9 @@ class _ShareImgState extends State<ShareImg> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => HomePage(
+                                index: 1,
+                              )));
                 },
                 icon: const Icon(Icons.share),
                 label: const Text("Share")),

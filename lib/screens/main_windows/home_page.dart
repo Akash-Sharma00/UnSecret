@@ -5,7 +5,8 @@ import 'package:unsecret/screens/main_windows/profile.dart';
 
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  int index;
+   HomePage({Key? key, required this.index}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -25,14 +26,14 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         
         body: IndexedStack(
-          index: _selectedIndex,
+          index: widget.index,
           children: screen,
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.green[50],
-            currentIndex: _selectedIndex,
+            currentIndex: widget.index,
             onTap: (index) => setState(() {
-                  _selectedIndex = index;
+                  widget.index = index;
                 }),
             showUnselectedLabels: false,
             items: const [

@@ -16,12 +16,11 @@ class PersonalChat extends StatefulWidget {
 
 class _PersonalChatState extends State<PersonalChat> {
   final personal = FirebaseFirestore.instance
-      .collection('personal-chats/vishial & vishi/vishial/');
+      .collection('personal-chats/');
   String? Lid, Cid;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -51,11 +50,11 @@ class _PersonalChatState extends State<PersonalChat> {
               if (snapshot.hasData) {
                 return ListView.builder(
                     reverse: true,
-                    itemCount: snapshot.data?.docs.length,
+                    itemCount:5,
                     itemBuilder: (context, index) {
-                      return const Text(
-                        "Hello",
-                        style: TextStyle(color: Colors.red),
+                      return  Text(
+                        snapshot.data.toString(),
+                        style: const TextStyle(color: Colors.red),
                       );
                     });
               }

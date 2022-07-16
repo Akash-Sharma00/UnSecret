@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       home:
           // const Profile()
-          user.currentUser != null ? const HomePage() : const LogIn(),
+          user.currentUser != null ?  HomePage(index: 0,) : const LogIn(),
     );
   }
 }

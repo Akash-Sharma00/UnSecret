@@ -3,7 +3,7 @@ import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/main_windows/gallery.dart';
 
 Widget senderContainer(String period, String? message, String id, String? dp,
-    double w, String? mediaPost, List<String> pics, BuildContext context) {
+    double w, String? mediaPost, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: w * 0.18),
     alignment: Alignment.centerLeft,
@@ -20,7 +20,7 @@ Widget senderContainer(String period, String? message, String id, String? dp,
       children: [
         InkWell(
           onTap: () {
-            ConnectToFire().setPersonalChat(id, "vishi", "message", null, dp);
+            ConnectToFire().setPersonalChat("vishi", id, "message", null, dp);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,7 +65,7 @@ Widget senderContainer(String period, String? message, String id, String? dp,
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return Gallery(pics: pics);
+                    return Gallery(pics: [mediaPost]);
                   }));
                 },
                 child: ClipRRect(
@@ -78,7 +78,7 @@ Widget senderContainer(String period, String? message, String id, String? dp,
 }
 
 Widget receiverContainer(String? dp, String period, String? message, String id,
-    double w, String? mediaPost, List<String> pics, BuildContext context) {
+    double w, String? mediaPost, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(top: 5, bottom: 5, left: w * 0.2, right: 10),
     alignment: Alignment.centerRight,
@@ -130,10 +130,9 @@ Widget receiverContainer(String? dp, String period, String? message, String id,
             ? Text(textAlign: TextAlign.left, message!)
             : InkWell(
                 onTap: () {
-                  print("object");
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return Gallery(pics: pics);
+                    return Gallery(pics: [mediaPost]);
                   }));
                 },
                 child: ClipRRect(

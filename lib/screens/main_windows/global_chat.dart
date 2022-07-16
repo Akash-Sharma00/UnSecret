@@ -20,7 +20,6 @@ class _GlobalChatState extends State<GlobalChat> {
   TextEditingController messages = TextEditingController();
   final globalChat = FirebaseFirestore.instance.collection('global-chat');
   ConnectToFire connect = ConnectToFire();
-  List<String> allPic = [];
 
   @override
   void initState() {
@@ -95,9 +94,6 @@ class _GlobalChatState extends State<GlobalChat> {
                   reverse: true,
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
-                    if (snapshot.data?.docs[index]['mediapost'] != null) {
-                      allPic.insert(0, snapshot.data?.docs[index]['mediapost']);
-                    }
                     if (snapshot.data?.docs[index]['id'] != profile['userid']) {
                       return senderContainer(
                           snapshot.data?.docs[index]['timeStamp'],
@@ -106,7 +102,7 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['dpUrl'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          allPic,
+                          
                           context);
                     } else {
                       return receiverContainer(
@@ -116,13 +112,13 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['id'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          allPic,
+                          
                           context);
                     }
                   });
             }
             return const Center(
-              child: Text("Somethind went Wrong"),
+              child: CircularProgressIndicator(),
             );
           }),
       bottomNavigationBar: Padding(

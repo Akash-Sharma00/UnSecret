@@ -134,6 +134,6 @@ class ConnectToFire {
       'createdAt': DateTime.now(),
       'read': false,
     };
-    personalChat.doc("$localId & $cloudId").collection(localId).add(personal);
+    personalChat.doc(localId).collection(cloudId).add(personal);
   }
 }
