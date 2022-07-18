@@ -3,7 +3,7 @@ import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/main_windows/gallery.dart';
 
 Widget senderContainer(String period, String? message, String id, String? dp,
-    double w, String? mediaPost, BuildContext context) {
+    double w, String? mediaPost, BuildContext context,String pId) {
   return Container(
     margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: w * 0.18),
     alignment: Alignment.centerLeft,
@@ -20,7 +20,7 @@ Widget senderContainer(String period, String? message, String id, String? dp,
       children: [
         InkWell(
           onTap: () {
-            ConnectToFire().setPersonalChat("vishi", id, "message", null, dp);
+            ConnectToFire().setPersonalChat(pId, id, "message", null, dp);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

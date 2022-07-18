@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ConnectToFire {
   final user = FirebaseFirestore.instance.collection('users');
   final globalChat = FirebaseFirestore.instance.collection('global-chat');
-  final personalChat = FirebaseFirestore.instance.collection('personal-chats');
   final auth = FirebaseAuth.instance;
   late SharedPreferences? pref;
 
@@ -127,13 +126,27 @@ class ConnectToFire {
       String? dp) async {
     final personal = {
       'message': message,
-      'id': localId,
+      'id': cloudId,
       'pic': pic,
       'dp': dp,
       'time': DateTime.now().toString().substring(0, 16),
-      'createdAt': DateTime.now(),
+      // 'createdAt': DateTime.now(),
       'read': false,
     };
-    personalChat.doc(cloudId).set(personal);
+    final personalChat =
+        FirebaseFirestore.instance.collection('personal-chats');
+    personalChat.doc(localId).collection('connects').doc().set(personal);
+  }
+  saveAllChat(String pid,String id,String messages,String? picture)async{
+    final private = FirebaseFirestore.instance.collection('all-chats');
+    final privateChat = {
+      'message':messages,
+      'picture':picture,
+      'createdAt': DateTime.now(),
+      'time': DateTime.now().toString().substring(0, 16),
+      'read':false,
+      'id':pid
+    };
+    private.doc(pid).collection(id).doc().set(privateChat);
   }
 }

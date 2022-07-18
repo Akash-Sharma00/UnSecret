@@ -102,8 +102,8 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['dpUrl'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          
-                          context);
+                          context,
+                          profile['userid']);
                     } else {
                       return receiverContainer(
                           snapshot.data?.docs[index]['dpUrl'],
@@ -112,7 +112,6 @@ class _GlobalChatState extends State<GlobalChat> {
                           snapshot.data?.docs[index]['id'],
                           MediaQuery.of(context).size.width,
                           snapshot.data?.docs[index]['mediapost'],
-                          
                           context);
                     }
                   });

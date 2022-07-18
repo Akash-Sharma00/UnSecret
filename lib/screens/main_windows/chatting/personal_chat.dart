@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../authentication/log_in.dart';
+import 'package:unsecret/connect_to_fire.dart';
+import 'package:unsecret/screens/main_windows/chatting/chat_in_private.dart';
+import '../../authentication/log_in.dart';
 
 class PersonalChat extends StatefulWidget {
   const PersonalChat({
@@ -14,12 +15,20 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends State<PersonalChat> {
+  Map profile = {};
+  final data = ConnectToFire();
+
   @override
   void initState() {
+    getData();
+    setState(() {});
     super.initState();
   }
 
-  getides() async {}
+  getData() async {
+    profile = await data.getLocalData();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +48,12 @@ class _PersonalChatState extends State<PersonalChat> {
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('personal-chats')
+                .collection('personal-chats/${profile['userid']}/connects')
                 // .orderBy(MessageField.createdAt, descending: true)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              print(snapshot.data?.docs.length);
+              print(profile['userid']);
+
               if (snapshot.hasData) {
                 return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
@@ -59,15 +69,18 @@ class _PersonalChatState extends State<PersonalChat> {
               return Container(
                 color: Colors.red,
               );
-            }
-            //  const Text("Personal Chat")
-            ));
+            }));
   }
 
   Widget chatList(String? dp, String userid, String? lastMessage) {
     return InkWell(
       onTap: () {
-        print(userid);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChatInPrivate(
+                  id: userid,
+                  dp: dp,
+                  pid: profile['userid'],
+                )));
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -106,7 +119,7 @@ class _PersonalChatState extends State<PersonalChat> {
                 ),
               ],
             ),
-                const Text("data"),
+            const Text("data"),
           ],
         ),
       ),

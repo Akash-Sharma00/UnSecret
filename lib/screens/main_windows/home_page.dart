@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unsecret/screens/main_windows/global_chat.dart';
-import 'package:unsecret/screens/main_windows/personal_chat.dart';
+import 'package:unsecret/screens/main_windows/chatting/personal_chat.dart';
 import 'package:unsecret/screens/main_windows/profile.dart';
 
 
