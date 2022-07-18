@@ -115,38 +115,77 @@ class _ProfileState extends State<Profile> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.62,
                     child: TabBarView(children: [
-                      Container(
-                        color: Colors.red,
-                      ),
-                      Container()
-                      // StreamBuilder(
-                      //     stream: FirebaseFirestore.instance
-                      //         .collection('global-chat')
-                      //         .orderBy(MessageField.createdAt,
-                      //             descending: true)
-                      //         .snapshots(),
-                      //     builder:
-                      //         (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      //       if (snapshot.hasData) {
-                      //         return ListView.builder(
-                      //             itemCount: snapshot.data?.docs.length,
-                      //             itemBuilder: (context, index) {
-                      //               if (snapshot.data?.docs[index]['id'] ==
-                      //                   profile!['userid']) {
-                      //                 return senderContainer(
-                      //                     snapshot.data?.docs[index]
-                      //                         ['timeStamp'],
-                      //                     snapshot.data?.docs[index]['message'],
-                      //                     snapshot.data?.docs[index]['id'],
-                      //                     snapshot.data?.docs[index]['dpUrl'],
-                      //                     MediaQuery.of(context).size.width,snapshot.data?.docs[index]['mediapost'],null);
-                      //               } else {
-                      //                 return Container();
-                      //               }
-                      //             });
-                      //       }
-                      //       return Container();
-                      //     }),
+                     StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('global-chat')
+                              .orderBy(MessageField.createdAt, descending: true)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                  itemCount: snapshot.data?.docs.length,
+                                  itemBuilder: (context, index) {
+                                    if (snapshot.data?.docs[index]['id'] ==
+                                            profile['userid'] &&
+                                        snapshot.data?.docs[index]
+                                                ['mediapost'] !=
+                                            null) {
+                                      return senderContainer(
+                                          snapshot.data?.docs[index]
+                                              ['timeStamp'],
+                                          // snapshot.data?.docs[index]['message']
+                                          null,
+                                          snapshot.data?.docs[index]['id'],
+                                          snapshot.data?.docs[index]['dpUrl'],
+                                          MediaQuery.of(context).size.width,
+                                          snapshot.data?.docs[index]
+                                              ['mediapost']
+                                          ,
+                                          context,
+                                          '');
+                                    } else {
+                                      return Container();
+                                    }
+                                  });
+                            }
+                            return Container();
+                          }),
+                      StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('global-chat')
+                              .orderBy(MessageField.createdAt, descending: true)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                  itemCount: snapshot.data?.docs.length,
+                                  itemBuilder: (context, index) {
+                                    if (snapshot.data?.docs[index]['id'] ==
+                                            profile['userid'] &&
+                                        snapshot.data?.docs[index]
+                                                ['mediapost'] ==
+                                            null) {
+                                      return senderContainer(
+                                          snapshot.data?.docs[index]
+                                              ['timeStamp'],
+                                          snapshot.data?.docs[index]['message'],
+                                          snapshot.data?.docs[index]['id'],
+                                          snapshot.data?.docs[index]['dpUrl'],
+                                          MediaQuery.of(context).size.width,
+                                          // snapshot.data?.docs[index]
+                                          //     ['mediapost']
+                                          null,
+                                          context,
+                                          '');
+                                    } else {
+                                      return Container();
+                                    }
+                                  });
+                            }
+                            return Container();
+                          }),
                     ]),
                   )
                 ],

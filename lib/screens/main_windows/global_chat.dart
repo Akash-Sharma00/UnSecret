@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unsecret/resources/userHelper.dart';
 import 'package:unsecret/screens/main_windows/share_img.dart';
-
 import '../../connect_to_fire.dart';
 import '../../resources/chat_containers.dart';
 

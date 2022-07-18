@@ -47,6 +47,8 @@ class _ShareImgState extends State<ShareImg> {
     }
   }
 
+  var isVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +94,9 @@ class _ShareImgState extends State<ShareImg> {
             child: ElevatedButton.icon(
                 onPressed: () async {
                   try {
+                    setState(() {
+                      isVisible = true;
+                    });
                     task = ConnectToFire.uploadImg(
                         "global-chat/${widget.id}/${DateTime.now()}", image!);
                     if (task == null) return;
@@ -101,17 +106,19 @@ class _ShareImgState extends State<ShareImg> {
                       case 'global':
                         fire.saveToGlobal(
                             widget.dpulr, widget.id, null, imgUrl);
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
 
                         return;
                       case 'personal':
                         fire.saveAllChat(widget.pid, widget.id, null, imgUrl);
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
 
                         return;
+                      default:
+                        break;
                     }
                   } catch (e) {
-                    Navigator.of(context, rootNavigator: true).pop();
+                    isVisible = false;
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         backgroundColor: Colors.white,
                         content: Text(
@@ -127,6 +134,9 @@ class _ShareImgState extends State<ShareImg> {
                 icon: const Icon(Icons.share),
                 label: const Text("Share")),
           ),
+          const SizedBox(height: 10),
+          Visibility(
+              visible: isVisible, child: const CircularProgressIndicator())
         ],
       )),
     );

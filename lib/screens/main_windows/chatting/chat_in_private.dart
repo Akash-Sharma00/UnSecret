@@ -30,13 +30,13 @@ class _ChatInPrivateState extends State<ChatInPrivate> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             widget.dp == null
-                ? Image.asset('asset/default_profile.png',
-                    height: 30, width: 30, fit: BoxFit.cover)
+                ? Image.asset('asset/private_chat_icon.png',
+                    height: 50, width: 50, fit: BoxFit.cover)
                 : InkWell(
                     onTap: () {},
                     child: ClipOval(
                         child: Image.network(widget.dp!,
-                            height: 30, width: 30, fit: BoxFit.cover)),
+                            height: 50, width: 50, fit: BoxFit.cover)),
                   ),
             const SizedBox(
               width: 10,
@@ -44,15 +44,6 @@ class _ChatInPrivateState extends State<ChatInPrivate> {
             Text(widget.id),
           ],
         ),
-        // leading: widget.dp == null
-        //     ? Image.asset('asset/default_profile.png',
-        //         height: 30, width: 30, fit: BoxFit.cover)
-        //     : InkWell(
-        //         onTap: () {},
-        //         child: ClipOval(
-        //             child: Image.network(widget.dp!,
-        //                 height: 30, width: 30, fit: BoxFit.cover)),
-        //       )
       ),
       body: Column(
         children: [
