@@ -78,7 +78,7 @@ class _LogInState extends State<LogIn> {
                         hidePass = !hidePass;
                       });
                     },
-                    icon: hidePass ? const Icon(Icons.visibility_off) : ispass),
+                    icon: hidePass ? const Icon(Icons.visibility) : ispass),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(

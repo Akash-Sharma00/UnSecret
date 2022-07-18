@@ -223,6 +223,5 @@ Widget personalReceiverContainer(String? dp, String period, String? message,
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(mediaPost)),
               ),
-       
       ]));
 }

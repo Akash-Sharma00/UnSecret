@@ -53,14 +53,7 @@ class _ProfileState extends State<Profile> {
                                     onPressed: () {
                                       showDialog(
                                           context: context,
-                                          builder: (context) => (const AlertDialog(title:Text("Alert"))));
-                                      // final auth = FirebaseAuth.instance;
-                                      // auth.signOut();
-                                      // Navigator.pushReplacement(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             const LogIn()));
+                                          builder: (context) => signOutBox());
                                     },
                                     child: const Text("Sign Out")),
                               )
@@ -215,6 +208,31 @@ class _ProfileState extends State<Profile> {
           ),
         ),
       ),
+    );
+  }
+
+  signOutBox() {
+    return AlertDialog(
+      content: const Text("Are you sure you want to sign out"),
+      actions: [
+        TextButton(
+            onPressed: () {
+              final auth = FirebaseAuth.instance;
+              auth.signOut();
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LogIn(),
+                  ));
+            },
+            child: const Text("Yes")),
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("No"))
+      ],
     );
   }
 }
