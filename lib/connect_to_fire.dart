@@ -66,6 +66,24 @@ class ConnectToFire {
     return true;
   }
 
+  getUserData(String? id, String mail) async {
+    await for (var users in user.snapshots()) {
+      for (var data in users.docs.toList()) {
+        if (data.get('email').toString().contains(mail)) {
+          print(data.data()['name']);
+
+          saveLocal(
+              data.data()['name'],
+              data.data()['userId'],
+              data.data()['email'],
+              data.data()['contact'],
+              false,
+              data.data()['image']);
+        }
+      }
+    }
+  }
+
   Future<bool?> getUserEmail(String mail) async {
     await for (var messages in user.snapshots()) {
       for (var message in messages.docs.toList()) {
@@ -137,16 +155,18 @@ class ConnectToFire {
         FirebaseFirestore.instance.collection('personal-chats');
     personalChat.doc(localId).collection('connects').doc().set(personal);
   }
-  saveAllChat(String pid,String id,String messages,String? picture)async{
+
+  saveAllChat(String? pid, String id, String? messages, String? picture) async {
     final private = FirebaseFirestore.instance.collection('all-chats');
     final privateChat = {
-      'message':messages,
-      'picture':picture,
+      'message': messages,
+      'picture': picture,
       'createdAt': DateTime.now(),
       'time': DateTime.now().toString().substring(0, 16),
-      'read':false,
-      'id':pid
+      'read': false,
+      'id': pid
     };
     private.doc(pid).collection(id).doc().set(privateChat);
+    private.doc(id).collection(pid!).doc().set(privateChat);
   }
 }

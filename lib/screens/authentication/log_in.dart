@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:unsecret/connect_to_fire.dart';
 import 'package:unsecret/screens/authentication/new_account.dart';
 import 'package:unsecret/screens/main_windows/home_page.dart';
 
@@ -16,6 +17,7 @@ class _LogInState extends State<LogIn> {
   bool hidePass = true;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -116,6 +118,7 @@ class _LogInState extends State<LogIn> {
                 child: ElevatedButton(
                   onPressed: () {
                     verifyDetails(email.text, password.text);
+                    ConnectToFire().getUserData("id", email.text);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

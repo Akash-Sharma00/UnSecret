@@ -138,7 +138,7 @@ class _GlobalChatState extends State<GlobalChat> {
                             return ShareImg(
                                 id: profile['userid'],
                                 header: 'Global',
-                                dpulr: profile['url']);
+                                dpulr: profile['url'],des: 'global',);
                           })));
                         },
                         icon: const Icon(Icons.camera_alt_outlined)),

@@ -5,12 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unsecret/connect_to_fire.dart';
-import 'package:unsecret/screens/main_windows/home_page.dart';
 
 class ShareImg extends StatefulWidget {
-  final String header, id;
-  final String? dpulr;
-  const ShareImg({Key? key, required this.id, required this.header, this.dpulr})
+  final String header, id, des;
+  final String? dpulr, pid;
+  const ShareImg(
+      {Key? key,
+      required this.id,
+      required this.header,
+      this.dpulr,
+      required this.des,
+      this.pid})
       : super(key: key);
 
   @override
@@ -86,18 +91,25 @@ class _ShareImgState extends State<ShareImg> {
             width: 300,
             child: ElevatedButton.icon(
                 onPressed: () async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const Center(child: CircularProgressIndicator());
-                      });
                   try {
                     task = ConnectToFire.uploadImg(
                         "global-chat/${widget.id}/${DateTime.now()}", image!);
                     if (task == null) return;
                     final snapShot = await task!.whenComplete(() {});
                     final imgUrl = await snapShot.ref.getDownloadURL();
-                    fire.saveToGlobal(widget.dpulr, widget.id, null, imgUrl);
+                    switch (widget.des) {
+                      case 'global':
+                        fire.saveToGlobal(
+                            widget.dpulr, widget.id, null, imgUrl);
+                        Navigator.pop(context);
+
+                        return;
+                      case 'personal':
+                        fire.saveAllChat(widget.pid, widget.id, null, imgUrl);
+                        Navigator.pop(context);
+
+                        return;
+                    }
                   } catch (e) {
                     Navigator.of(context, rootNavigator: true).pop();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -111,12 +123,6 @@ class _ShareImgState extends State<ShareImg> {
                         )));
                     return;
                   }
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                index: 1,
-                              )));
                 },
                 icon: const Icon(Icons.share),
                 label: const Text("Share")),

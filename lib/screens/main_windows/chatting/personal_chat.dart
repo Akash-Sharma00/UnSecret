@@ -64,7 +64,6 @@ class _PersonalChatState extends State<PersonalChat> {
                           "The Last Message jfhdgf dfgjhdbf ufhgk fhfdkjvgfkghfjghf kfdjghg fh fh sdjf sdhgkfdkfd kfd");
                     });
               } else {
-                print("object");
               }
               return Container(
                 color: Colors.red,
