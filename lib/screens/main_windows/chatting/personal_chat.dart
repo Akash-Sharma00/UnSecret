@@ -35,16 +35,7 @@ class _PersonalChatState extends State<PersonalChat> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("personal-chats"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  final auth = FirebaseAuth.instance;
-                  auth.signOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const LogIn()));
-                },
-                icon: const Icon(Icons.abc))
-          ],
+          
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance

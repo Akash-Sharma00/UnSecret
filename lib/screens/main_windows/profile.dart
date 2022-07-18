@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unsecret/connect_to_fire.dart';
+import 'package:unsecret/screens/authentication/log_in.dart';
 import '../../resources/chat_containers.dart';
 import '../../resources/userHelper.dart';
 
@@ -33,15 +35,36 @@ class _ProfileState extends State<Profile> {
       length: 2,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.green[50],
           body: SingleChildScrollView(
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    // color: Colors.blue,
                     child: Column(
                       children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => (const AlertDialog(title:Text("Alert"))));
+                                      // final auth = FirebaseAuth.instance;
+                                      // auth.signOut();
+                                      // Navigator.pushReplacement(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             const LogIn()));
+                                    },
+                                    child: const Text("Sign Out")),
+                              )
+                            ]),
                         const SizedBox(
                           height: 10,
                         ),
@@ -115,7 +138,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.62,
                     child: TabBarView(children: [
-                     StreamBuilder(
+                      StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('global-chat')
                               .orderBy(MessageField.createdAt, descending: true)
@@ -134,14 +157,12 @@ class _ProfileState extends State<Profile> {
                                       return senderContainer(
                                           snapshot.data?.docs[index]
                                               ['timeStamp'],
-                                          // snapshot.data?.docs[index]['message']
-                                          null,
+                                          '',
                                           snapshot.data?.docs[index]['id'],
                                           snapshot.data?.docs[index]['dpUrl'],
                                           MediaQuery.of(context).size.width,
                                           snapshot.data?.docs[index]
-                                              ['mediapost']
-                                          ,
+                                              ['mediapost'],
                                           context,
                                           '');
                                     } else {
